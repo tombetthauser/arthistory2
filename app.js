@@ -1,5 +1,7 @@
 // controls –––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
+var start = false;
+
 var imageCount = 206;
 
 var title = "ART HISTORY"
@@ -31,10 +33,9 @@ var opacityVariation = true;
 var staticOpacityVar = 1;
 
 
-
 // arrays –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-
+var imageArr = [];
 
 // variables ––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
@@ -49,14 +50,28 @@ document.getElementById("title").innerHTML = title;
 
 // commands –––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-init();
-if (demoModeOn === true) {
-	demoMode();
-};
+for (var i = 0; i <= imageCount; i++){
+	var imagePath = "images/" + i + ".jpg";
+	var imageTemp = new Image();
+	imageTemp.src = imagePath;
+	imageArr.push(imageTemp);
+}
 
+function waitForLoad() {
+	setTimeout(function(){
+		for(var i = 0; i < imageArr.length; i++){
+			if(!imageArr[i].complete){
+				return waitForLoad();
+			}
+		}
+		init();
+		if (demoModeOn === true) {
+			demoMode();
+		}
+	}, 100);
+}
 
-
-
+waitForLoad()
 // listeners ––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 
@@ -248,9 +263,9 @@ function randomImage(){
 	if(y === 1){
 		marginPlusMinus = "-";
 	};
-	document.getElementById('image').src = ("images/" + x + ".jpg");
+	document.getElementById('image').src = imageArr[x].src;
 	// document.getElementById('body').style.backgroundImage = "url(images/" + (Math.round(Math.random() * x )) + ".jpg)";
-	document.getElementById('background').src = "images/" + (Math.round(Math.random() * x )) + ".jpg";
+	document.getElementById('background').src = imageArr[(Math.round(Math.random() * x ))].src;
 	document.getElementById('image').style.width = width + imageWidthMin + "%";
 	document.getElementById('image').style.marginTop = marginTop + "%";
 	var z = marginPlusMinus + marginLeft;
